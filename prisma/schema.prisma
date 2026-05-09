@@ -1,0 +1,293 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  role      String   @default("admin")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Client {
+  id                  String         @id @default(uuid())
+  firstName           String
+  lastName            String
+  email               String?
+  phone               String?
+  birthDate           DateTime?
+  gender              String?
+  heightCm            Int?
+  weightStart         Float?
+  weightCurrent       Float?
+  mainGoal            String?
+  secondaryGoals      String?
+  level               String?
+  physicalConstraints String?
+  availability        String?
+  equipment           String?
+  status              String         @default("active")
+  notes               String?
+  startDate           DateTime?
+  plannedEndDate      DateTime?
+  consent             Boolean        @default(false)
+  createdAt           DateTime       @default(now())
+  updatedAt           DateTime       @updatedAt
+  deletedAt           DateTime?
+  goals               ClientGoal[]
+  programs            Program[]
+  notesList           ClientNote[]
+  workoutLogs         WorkoutLog[]
+  ebookRecommendations EbookRecommendation[]
+  appointments        Appointment[]
+  documents           Document[]
+  nutritionProfile    NutritionProfile?
+  mentalProfile       MentalProfile?
+}
+
+model ClientGoal {
+  id          String   @id @default(uuid())
+  client      Client   @relation(fields: [clientId], references: [id])
+  clientId    String
+  name        String
+  description String?
+  priority    Int      @default(2)
+  startDate   DateTime?
+  targetDate  DateTime?
+  status      String   @default("active")
+  metrics     String?
+  notes       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Program {
+  id              String         @id @default(uuid())
+  client          Client?        @relation(fields: [clientId], references: [id])
+  clientId        String?
+  name            String
+  description     String?
+  durationWeeks   Int?
+  sessionsPerWeek Int?
+  goal            String?
+  level           String?
+  equipment       String?
+  notes           String?
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+  weeks           ProgramWeek[]
+}
+
+model ProgramWeek {
+  id        String           @id @default(uuid())
+  program   Program          @relation(fields: [programId], references: [id])
+  programId String
+  title     String
+  weekNumber Int
+  notes     String?
+  sessions  ProgramSession[]
+}
+
+model ProgramSession {
+  id        String           @id @default(uuid())
+  week      ProgramWeek      @relation(fields: [weekId], references: [id])
+  weekId    String
+  title     String
+  day       String?
+  description String?
+  exercises SessionExercise[]
+}
+
+model SessionExercise {
+  id             String   @id @default(uuid())
+  session        ProgramSession @relation(fields: [sessionId], references: [id])
+  sessionId      String
+  name           String
+  muscleGroup    String?
+  type           String?
+  sets           Int?
+  reps           String?
+  duration       String?
+  rest           String?
+  load           String?
+  intensity      String?
+  tempo          String?
+  instructions   String?
+  alternatives   String?
+  notes          String?
+}
+
+model ExerciseLibrary {
+  id                String   @id @default(uuid())
+  name              String
+  category          String?
+  primaryMuscle     String?
+  secondaryMuscles  String?
+  equipment         String?
+  level             String?
+  instructions      String?
+  commonMistakes    String?
+  contraindications String?
+  tags              String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
+
+model WorkoutLog {
+  id             String   @id @default(uuid())
+  client         Client   @relation(fields: [clientId], references: [id])
+  clientId       String
+  sessionDate    DateTime
+  exercisesDone  String?
+  commentCoach   String?
+  commentClient  String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+model NutritionProfile {
+  id             String   @id @default(uuid())
+  client         Client   @relation(fields: [clientId], references: [id])
+  clientId       String   @unique
+  targetCalories Int?
+  targetProtein  Int?
+  targetCarbs    Int?
+  targetFats     Int?
+  mealsPerDay    Int?
+  preferences    String?
+  exclusions     String?
+  allergies      String?
+  notes          String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  logs           NutritionLog[]
+}
+
+model NutritionLog {
+  id            String   @id @default(uuid())
+  profile       NutritionProfile @relation(fields: [profileId], references: [id])
+  profileId     String
+  date          DateTime
+  weight        Float?
+  calories      Int?
+  protein       Int?
+  hydration     Int?
+  sleep         Int?
+  hunger        Int?
+  energy        Int?
+  digestion     String?
+  compliance    String?
+  notes         String?
+  createdAt     DateTime @default(now())
+}
+
+model MentalProfile {
+  id          String   @id @default(uuid())
+  client      Client   @relation(fields: [clientId], references: [id])
+  clientId    String   @unique
+  goal        String?
+  motivation  Int?
+  stress      Int?
+  confidence  Int?
+  discipline  Int?
+  blocks      String?
+  routines    String?
+  notes       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  checkIns    MentalCheckin[]
+}
+
+model MentalCheckin {
+  id            String   @id @default(uuid())
+  profile       MentalProfile @relation(fields: [profileId], references: [id])
+  profileId     String
+  date          DateTime
+  motivation    Int?
+  stress        Int?
+  confidence    Int?
+  sleep         Int?
+  comment       String?
+  actionPriority String?
+  createdAt     DateTime @default(now())
+}
+
+model Ebook {
+  id          String   @id @default(uuid())
+  title       String
+  description String?
+  objective   String?
+  level       String?
+  price       Float?
+  filePath    String?
+  coverPath   String?
+  tags        String?
+  status      String   @default("draft")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  recommendations EbookRecommendation[]
+}
+
+model EbookRecommendation {
+  id         String   @id @default(uuid())
+  client     Client   @relation(fields: [clientId], references: [id])
+  clientId   String
+  ebook      Ebook    @relation(fields: [ebookId], references: [id])
+  ebookId    String
+  sent       Boolean  @default(false)
+  sentAt     DateTime?
+  note       String?
+  createdAt  DateTime @default(now())
+}
+
+model Appointment {
+  id        String   @id @default(uuid())
+  client    Client   @relation(fields: [clientId], references: [id])
+  clientId  String
+  date      DateTime
+  type      String
+  status    String   @default("scheduled")
+  notes     String?
+  summary   String?
+  action    String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ClientNote {
+  id        String   @id @default(uuid())
+  client    Client   @relation(fields: [clientId], references: [id])
+  clientId  String
+  content   String
+  type      String   @default("note")
+  createdAt DateTime @default(now())
+}
+
+model Document {
+  id        String   @id @default(uuid())
+  client    Client?  @relation(fields: [clientId], references: [id])
+  clientId  String?
+  filePath  String
+  label     String?
+  type      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Setting {
+  id             Int      @id @default(1)
+  coachName      String?
+  businessName   String?
+  email          String?
+  phone          String?
+  disclaimer     String?
+  nutritionAdvice String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
