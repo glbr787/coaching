@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { NavLink, Navigate, Route, Routes, useNavigate } from 'react-router-dom';
+import { Navigate, Route, Routes, useNavigate } from 'react-router-dom';
 import { api } from './lib/api';
 import Dashboard from './pages/Dashboard';
 import Clients from './pages/Clients';
@@ -8,6 +8,9 @@ import Programs from './pages/Programs';
 import Exercises from './pages/Exercises';
 import Settings from './pages/Settings';
 import Login from './pages/Login';
+import Sidebar from './components/layout/Sidebar';
+import Header from './components/layout/Header';
+import Card from './components/ui/Card';
 
 function App() {
   const [user, setUser] = useState<{ userId: string } | null>(null);
@@ -28,30 +31,26 @@ function App() {
   };
 
   if (loading) {
-    return <div className="loading">Chargement...</div>;
+    return (
+      <div className="ui-auth-shell">
+        <Card title="Chargement">
+          <p>Initialisation de l'application…</p>
+        </Card>
+      </div>
+    );
   }
 
   return (
-    <div className="app-shell">
-      {user && (
-        <aside className="sidebar">
-          <h1>Coach Local</h1>
-          <nav>
-            <NavLink to="/" end>Tableau de bord</NavLink>
-            <NavLink to="/clients">Clients</NavLink>
-            <NavLink to="/programs">Programmes</NavLink>
-            <NavLink to="/exercises">Exercices</NavLink>
-            <NavLink to="/settings">Paramètres</NavLink>
-          </nav>
-          <button className="secondary" style={{ marginTop: '1rem' }} onClick={handleLogout}>
-            Déconnexion
-          </button>
-        </aside>
-      )}
-      <main className="main">
-        <div className="topbar">
-          <div>{user ? `Connecté` : 'Non connecté'}</div>
-        </div>
+    <div className="ui-app-shell">
+      {user && <Sidebar onLogout={handleLogout} />}
+      <main className="ui-main">
+        {user && (
+          <Header
+            title="Coach Local"
+            subtitle="Application locale de suivi coaching"
+            rightSlot={<span className="ui-session-pill">Session active</span>}
+          />
+        )}
         <Routes>
           <Route path="/login" element={<Login onLogin={(data) => setUser(data)} />} />
           <Route
