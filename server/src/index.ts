@@ -5,6 +5,8 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import authRoutes from './routes/auth.js';
 import clientRoutes from './routes/clients.js';
+import goalsRoutes from './routes/goals.js';
+import metricsRoutes from './routes/metrics.js';
 import programRoutes from './routes/programs.js';
 import exerciseRoutes from './routes/exercises.js';
 import dashboardRoutes from './routes/dashboard.js';
@@ -35,6 +37,8 @@ app.use(
 
 app.use('/api/auth', authRoutes);
 app.use('/api/clients', clientRoutes);
+app.use('/api/goals', goalsRoutes);
+app.use('/api/metrics', metricsRoutes);
 app.use('/api/programs', programRoutes);
 app.use('/api/exercises', exerciseRoutes);
 app.use('/api/dashboard', dashboardRoutes);

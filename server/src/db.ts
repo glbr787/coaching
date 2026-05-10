@@ -63,12 +63,34 @@ CREATE TABLE IF NOT EXISTS client_goals (
   id TEXT PRIMARY KEY,
   client_id TEXT NOT NULL,
   name TEXT NOT NULL,
+  category TEXT NOT NULL DEFAULT 'Objectif',
   description TEXT,
   priority INTEGER NOT NULL DEFAULT 2,
   start_date TEXT,
   target_date TEXT,
   status TEXT NOT NULL DEFAULT 'active',
+  archived_at TEXT,
   metrics TEXT,
+  notes TEXT,
+  created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY(client_id) REFERENCES clients(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS client_metrics (
+  id TEXT PRIMARY KEY,
+  client_id TEXT NOT NULL,
+  date TEXT NOT NULL,
+  weight REAL,
+  waist REAL,
+  chest REAL,
+  hips REAL,
+  arm REAL,
+  thigh REAL,
+  body_fat_percentage REAL,
+  resting_heart_rate INTEGER,
+  energy_level INTEGER,
+  sleep_quality INTEGER,
   notes TEXT,
   created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -245,6 +267,18 @@ CREATE TABLE IF NOT EXISTS documents (
   FOREIGN KEY(client_id) REFERENCES clients(id) ON DELETE SET NULL
 );
 `);
+
+const clientGoalColumns = db.prepare("PRAGMA table_info('client_goals')").all() as Array<{ name: string }>;
+const hasCategory = clientGoalColumns.some((column) => column.name === 'category');
+const hasArchivedAt = clientGoalColumns.some((column) => column.name === 'archived_at');
+
+if (!hasCategory) {
+  db.prepare("ALTER TABLE client_goals ADD COLUMN category TEXT NOT NULL DEFAULT 'Objectif'").run();
+}
+
+if (!hasArchivedAt) {
+  db.prepare("ALTER TABLE client_goals ADD COLUMN archived_at TEXT").run();
+}
 
 const ensureSettings = db.prepare('INSERT OR IGNORE INTO settings (id, coach_name, business_name, email, phone, disclaimer, nutrition_advice) VALUES (1, ?, ?, ?, ?, ?, ?)');
 ensureSettings.run(

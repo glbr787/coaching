@@ -47,7 +47,22 @@ export const api = {
     notes: {
       list: (id: string) => request(`/clients/${id}/notes`),
       add: (id: string, content: string) => request(`/clients/${id}/notes`, { method: 'POST', body: { content } })
+    },
+    goals: {
+      list: (id: string) => request(`/clients/${id}/goals`),
+      add: (id: string, data: any) => request(`/clients/${id}/goals`, { method: 'POST', body: data })
+    },
+    metrics: {
+      list: (id: string) => request(`/clients/${id}/metrics`),
+      add: (id: string, data: any) => request(`/clients/${id}/metrics`, { method: 'POST', body: data })
     }
+  },
+  goals: {
+    update: (id: string, data: any) => request(`/goals/${id}`, { method: 'PUT', body: data })
+  },
+  metrics: {
+    update: (id: string, data: any) => request(`/metrics/${id}`, { method: 'PUT', body: data }),
+    delete: (id: string) => request(`/metrics/${id}`, { method: 'DELETE' })
   },
   programs: {
     list: () => request('/programs'),

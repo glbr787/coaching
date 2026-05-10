@@ -4,6 +4,7 @@ generator client {
 
 datasource db {
   provider = "sqlite"
+  url      = env("DATABASE_URL")
 }
 
 model User {
@@ -41,6 +42,7 @@ model Client {
   updatedAt           DateTime       @updatedAt
   deletedAt           DateTime?
   goals               ClientGoal[]
+  metrics             ClientMetric[]
   programs            Program[]
   notesList           ClientNote[]
   workoutLogs         WorkoutLog[]
@@ -56,15 +58,37 @@ model ClientGoal {
   client      Client   @relation(fields: [clientId], references: [id])
   clientId    String
   name        String
+  category    String   @default("Objectif")
   description String?
   priority    Int      @default(2)
   startDate   DateTime?
   targetDate  DateTime?
   status      String   @default("active")
+  archivedAt  DateTime?
   metrics     String?
   notes       String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+}
+
+model ClientMetric {
+  id                 String   @id @default(uuid())
+  client             Client   @relation(fields: [clientId], references: [id])
+  clientId           String
+  date               DateTime
+  weight             Float?
+  waist              Float?
+  chest              Float?
+  hips               Float?
+  arm                Float?
+  thigh              Float?
+  bodyFatPercentage  Float?
+  restingHeartRate   Int?
+  energyLevel        Int?
+  sleepQuality       Int?
+  notes              String?
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
 }
 
 model Program {

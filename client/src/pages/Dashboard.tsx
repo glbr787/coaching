@@ -26,8 +26,9 @@ export default function Dashboard() {
         <Card title="Clients totaux"><p>{stats.totalClients}</p></Card>
         <Card title="Clients actifs"><p>{stats.activeClients}</p></Card>
         <Card title="Clients en pause"><p>{stats.pausedClients}</p></Card>
-        <Card title="Programmes en cours"><p>{stats.programsCount}</p></Card>
-        <Card title="Suivis nutritionnels"><p>{stats.nutritionProfiles}</p></Card>
+        <Card title="Objectifs actifs"><p>{stats.activeGoals}</p></Card>
+        <Card title="Objectifs atteints"><p>{stats.achievedGoals}</p></Card>
+        <Card title="Pas de mesure récente"><p>{stats.clientsWithoutRecentMetrics}</p></Card>
       </div>
 
       <div className="ui-section-stack" style={{ marginTop: 16 }}>
@@ -39,6 +40,22 @@ export default function Dashboard() {
               {stats.topGoals.map((goal: any) => (
                 <li key={goal.name}>
                   {goal.name} ({goal.count})
+                </li>
+              ))}
+            </ul>
+          )}
+        </Card>
+      </div>
+
+      <div className="ui-section-stack" style={{ marginTop: 16 }}>
+        <Card title="Objectifs récents">
+          {stats.recentGoals.length === 0 ? (
+            <EmptyState title="Aucun objectif récent" description="Les objectifs créés récemment s’afficheront ici." />
+          ) : (
+            <ul>
+              {stats.recentGoals.map((goal: any) => (
+                <li key={goal.id}>
+                  <strong>{goal.name}</strong> — {goal.category} ({goal.status})
                 </li>
               ))}
             </ul>
