@@ -1,10 +1,16 @@
 node_modules/
 .env
+.env.local
+.env.*.local
 dev.db
 dev.db-shm
 dev.db-wal
 *.sqlite
 *.db
 prisma/dev.db
+*.db
+*.db-wal
+*.db-shm
+*.db-journal
 dist/
 .DS_Store
