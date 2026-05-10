@@ -5,7 +5,7 @@ dotenv.config();
 
 const url = process.env.DATABASE_URL || 'file:./dev.db';
 const dbFile = url.startsWith('file:') ? url.replace(/^file:\/\//, '').replace(/^file:/, '') : url;
-const db = new Database(dbFile);
+const db: Database.Database = new Database(dbFile);
 
 db.pragma('journal_mode = WAL');
 db.pragma('foreign_keys = ON');

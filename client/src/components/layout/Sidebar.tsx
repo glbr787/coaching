@@ -22,7 +22,12 @@ export default function Sidebar({ onLogout }: Props) {
       </div>
       <nav className="ui-sidebar-nav">
         {links.map((link) => (
-          <NavLink key={link.to} to={link.to} end={link.to === '/'} className="ui-nav-link">
+          <NavLink
+            key={link.to}
+            to={link.to}
+            end={link.to === '/'}
+            className={({ isActive }) => `ui-nav-link${isActive ? ' active' : ''}`}
+          >
             {link.label}
           </NavLink>
         ))}

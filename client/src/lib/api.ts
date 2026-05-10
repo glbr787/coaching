@@ -1,5 +1,23 @@
 const baseUrl = import.meta.env.DEV ? '/api' : '/api';
 
+function toCamelCase(input: string) {
+  return input.replace(/_([a-z])/g, (_, group: string) => group.toUpperCase());
+}
+
+function normalizeKeys<T>(value: T): T {
+  if (Array.isArray(value)) {
+    return value.map((item) => normalizeKeys(item)) as T;
+  }
+  if (value && typeof value === 'object') {
+    const entries = Object.entries(value as Record<string, unknown>).map(([key, val]) => [
+      toCamelCase(key),
+      normalizeKeys(val)
+    ]);
+    return Object.fromEntries(entries) as T;
+  }
+  return value;
+}
+
 async function request(path: string, options: RequestInit = {}) {
   const response = await fetch(`${baseUrl}${path}`, {
     credentials: 'include',
@@ -12,7 +30,8 @@ async function request(path: string, options: RequestInit = {}) {
     const json = await response.json().catch(() => null);
     throw new Error(json?.error || response.statusText);
   }
-  return response.json();
+  const json = await response.json();
+  return normalizeKeys(json);
 }
 
 export const api = {

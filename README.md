@@ -5,8 +5,9 @@ Application web locale pour un coach sportif indépendant.
 ## Stack
 - Frontend : React + Vite
 - Backend : Node.js + Express
-- Base de données : SQLite + Prisma
+- Base de données : SQLite locale (`better-sqlite3`)
 - Auth locale : session + mot de passe admin
+- UI : design system maison (thèmes clair/sombre/système + accent + densité)
 
 ## Installation
 1. Copier `.env.example` en `.env`
@@ -14,17 +15,9 @@ Application web locale pour un coach sportif indépendant.
    ```bash
    npm install
    ```
-3. Générer Prisma :
+3. Initialiser la base locale et les données fictives :
    ```bash
-   npm run prisma:generate
-   ```
-4. Créer la base de données :
-   ```bash
-   npm run migrate:dev
-   ```
-5. Charger des données fictives :
-   ```bash
-   npm run seed
+   npm run db:init
    ```
 
 ## Lancement
@@ -44,7 +37,16 @@ Application web locale pour un coach sportif indépendant.
 ## Structure
 - `client/` : frontend React
 - `server/` : backend Express
-- `prisma/` : schéma SQLite et seed
+- `prisma/seed.ts` : script de seed local (données fictives)
+
+## Système de thèmes
+- Mode clair, sombre et système
+- Choix utilisateur stocké en local (`localStorage`)
+- Couleur d'accent personnalisable
+- Densité d'interface : confortable / compacte
+- Variables CSS sémantiques centralisées (`background`, `surface`, `card`, `text`, `muted`, `border`, `accent`, `danger`, `success`, `warning`)
+
+Configuration accessible dans `Paramètres > Apparence`.
 
 ## Notes de conception
 - Les données sont conçues pour rester locales.

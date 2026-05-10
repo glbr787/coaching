@@ -1,5 +1,14 @@
 import { useEffect, useState, type FormEvent } from 'react';
 import { api } from '../lib/api';
+import Header from '../components/layout/Header';
+import Card from '../components/ui/Card';
+import FormField from '../components/ui/FormField';
+import Input from '../components/ui/Input';
+import Textarea from '../components/ui/Textarea';
+import Button from '../components/ui/Button';
+import Alert from '../components/ui/Alert';
+import Table from '../components/ui/Table';
+import EmptyState from '../components/ui/EmptyState';
 
 const emptyProgram = {
   name: '',
@@ -31,37 +40,33 @@ export default function Programs() {
 
   return (
     <>
-      <h2>Programmes</h2>
-      <div className="form-card">
-        <h3>Créer un programme simple</h3>
+      <Header title="Programmes" subtitle="Conception de plans d'entraînement simples" />
+      <Card title="Créer un programme simple">
         <form onSubmit={createProgram}>
-          <div className="field">
-            <label>Nom du programme</label>
-            <input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
-          </div>
-          <div className="field">
-            <label>Description</label>
-            <textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} />
-          </div>
-          <div className="field">
-            <label>Durée (semaines)</label>
-            <input type="number" value={form.durationWeeks} onChange={(e) => setForm({ ...form, durationWeeks: Number(e.target.value) })} />
-          </div>
-          <div className="field">
-            <label>Séances par semaine</label>
-            <input type="number" value={form.sessionsPerWeek} onChange={(e) => setForm({ ...form, sessionsPerWeek: Number(e.target.value) })} />
-          </div>
-          <div className="field">
-            <label>Objectif</label>
-            <input value={form.goal} onChange={(e) => setForm({ ...form, goal: e.target.value })} />
-          </div>
-          {error && <div className="error">{error}</div>}
-          <button type="submit" className="primary">Créer</button>
+          <FormField label="Nom du programme">
+            <Input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} required />
+          </FormField>
+          <FormField label="Description">
+            <Textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} />
+          </FormField>
+          <FormField label="Durée (semaines)">
+            <Input type="number" value={form.durationWeeks} onChange={(e) => setForm({ ...form, durationWeeks: Number(e.target.value) })} />
+          </FormField>
+          <FormField label="Séances par semaine">
+            <Input type="number" value={form.sessionsPerWeek} onChange={(e) => setForm({ ...form, sessionsPerWeek: Number(e.target.value) })} />
+          </FormField>
+          <FormField label="Objectif">
+            <Input value={form.goal} onChange={(e) => setForm({ ...form, goal: e.target.value })} />
+          </FormField>
+          {error && <Alert variant="danger">{error}</Alert>}
+          <Button type="submit">Créer</Button>
         </form>
-      </div>
-      <div className="card">
-        <h3>Liste des programmes</h3>
-        <table className="table">
+      </Card>
+      <Card title="Liste des programmes">
+        {programs.length === 0 ? (
+          <EmptyState title="Aucun programme" description="Créez un modèle simple pour démarrer." />
+        ) : (
+        <Table>
           <thead>
             <tr>
               <th>Nom</th>
@@ -74,12 +79,13 @@ export default function Programs() {
               <tr key={program.id}>
                 <td>{program.name}</td>
                 <td>{program.goal}</td>
-                <td>{program.durationWeeks ? `${program.durationWeeks} sem.` : '—'}</td>
+                <td>{program.durationWeeks ? `${program.durationWeeks} sem.` : '-'}</td>
               </tr>
             ))}
           </tbody>
-        </table>
-      </div>
+        </Table>
+        )}
+      </Card>
     </>
   );
 }

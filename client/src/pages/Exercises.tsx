@@ -1,5 +1,14 @@
 import { useEffect, useState, type FormEvent } from 'react';
 import { api } from '../lib/api';
+import Header from '../components/layout/Header';
+import Card from '../components/ui/Card';
+import FormField from '../components/ui/FormField';
+import Input from '../components/ui/Input';
+import Select from '../components/ui/Select';
+import Button from '../components/ui/Button';
+import Alert from '../components/ui/Alert';
+import Table from '../components/ui/Table';
+import EmptyState from '../components/ui/EmptyState';
 
 const emptyExercise = {
   name: '',
@@ -30,37 +39,34 @@ export default function Exercises() {
 
   return (
     <>
-      <h2>Bibliothèque d’exercices</h2>
-      <div className="form-card">
-        <h3>Ajouter un exercice</h3>
+      <Header title="Bibliothèque d'exercices" subtitle="Catalogue des mouvements et variantes" />
+      <Card title="Ajouter un exercice">
         <form onSubmit={createExercise}>
-          <div className="field">
-            <label>Nom</label>
-            <input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
-          </div>
-          <div className="field">
-            <label>Catégorie</label>
-            <input value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })} />
-          </div>
-          <div className="field">
-            <label>Muscle principal</label>
-            <input value={form.primaryMuscle} onChange={(e) => setForm({ ...form, primaryMuscle: e.target.value })} />
-          </div>
-          <div className="field">
-            <label>Niveau</label>
-            <select value={form.level} onChange={(e) => setForm({ ...form, level: e.target.value })}>
+          <FormField label="Nom">
+            <Input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} required />
+          </FormField>
+          <FormField label="Catégorie">
+            <Input value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })} />
+          </FormField>
+          <FormField label="Muscle principal">
+            <Input value={form.primaryMuscle} onChange={(e) => setForm({ ...form, primaryMuscle: e.target.value })} />
+          </FormField>
+          <FormField label="Niveau">
+            <Select value={form.level} onChange={(e) => setForm({ ...form, level: e.target.value })}>
               <option>Débutant</option>
               <option>Intermédiaire</option>
               <option>Avancé</option>
-            </select>
-          </div>
-          {error && <div className="error">{error}</div>}
-          <button type="submit" className="primary">Ajouter</button>
+            </Select>
+          </FormField>
+          {error && <Alert variant="danger">{error}</Alert>}
+          <Button type="submit">Ajouter</Button>
         </form>
-      </div>
-      <div className="card">
-        <h3>Exercices</h3>
-        <table className="table">
+      </Card>
+      <Card title="Exercices">
+        {exercises.length === 0 ? (
+          <EmptyState title="Aucun exercice" description="Ajoutez vos premiers mouvements de référence." />
+        ) : (
+        <Table>
           <thead>
             <tr>
               <th>Nom</th>
@@ -77,8 +83,9 @@ export default function Exercises() {
               </tr>
             ))}
           </tbody>
-        </table>
-      </div>
+        </Table>
+        )}
+      </Card>
     </>
   );
 }

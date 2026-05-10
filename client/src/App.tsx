@@ -9,7 +9,6 @@ import Exercises from './pages/Exercises';
 import Settings from './pages/Settings';
 import Login from './pages/Login';
 import Sidebar from './components/layout/Sidebar';
-import Header from './components/layout/Header';
 import Card from './components/ui/Card';
 
 function App() {
@@ -44,13 +43,6 @@ function App() {
     <div className="ui-app-shell">
       {user && <Sidebar onLogout={handleLogout} />}
       <main className="ui-main">
-        {user && (
-          <Header
-            title="Coach Local"
-            subtitle="Application locale de suivi coaching"
-            rightSlot={<span className="ui-session-pill">Session active</span>}
-          />
-        )}
         <Routes>
           <Route path="/login" element={<Login onLogin={(data) => setUser(data)} />} />
           <Route

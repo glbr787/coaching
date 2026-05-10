@@ -1,6 +1,11 @@
 import { useState, type FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../lib/api';
+import Card from '../components/ui/Card';
+import FormField from '../components/ui/FormField';
+import Input from '../components/ui/Input';
+import Button from '../components/ui/Button';
+import Alert from '../components/ui/Alert';
 
 interface Props {
   onLogin: (data: { userId: string }) => void;
@@ -19,8 +24,9 @@ export default function Login({ onLogin }: Props) {
     setError('');
 
     try {
-      const data = await api.login(email, password);
-      onLogin(data);
+      await api.login(email, password);
+      const me = await api.me();
+      onLogin(me);
       navigate('/');
     } catch (err: any) {
       setError(err.message || 'Erreur de connexion');
@@ -30,23 +36,32 @@ export default function Login({ onLogin }: Props) {
   };
 
   return (
-    <div className="form-card" style={{ maxWidth: 520, margin: '0 auto' }}>
-      <h2>Connexion admin</h2>
-      <p>Entrez votre email et mot de passe local pour accéder à l’application.</p>
-      <form onSubmit={handleSubmit}>
-        <div className="field">
-          <label>Email</label>
-          <input value={email} onChange={(e) => setEmail(e.target.value)} />
-        </div>
-        <div className="field">
-          <label>Mot de passe</label>
-          <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
-        </div>
-        {error && <div className="error">{error}</div>}
-        <button type="submit" className="primary" disabled={loading}>
-          {loading ? 'Connexion...' : 'Se connecter'}
-        </button>
-      </form>
+    <div className="ui-auth-shell">
+      <Card
+        title="Connexion admin"
+        subtitle="Accès local sécurisé au tableau de pilotage"
+        className="ui-auth-card"
+      >
+        <form onSubmit={handleSubmit}>
+          <FormField label="Email">
+            <Input value={email} onChange={(e) => setEmail(e.target.value)} autoComplete="username" />
+          </FormField>
+          <FormField label="Mot de passe">
+            <Input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              autoComplete="current-password"
+            />
+          </FormField>
+          {error && <Alert variant="danger">{error}</Alert>}
+          <div style={{ marginTop: 10 }}>
+            <Button type="submit" block disabled={loading}>
+              {loading ? 'Connexion…' : 'Se connecter'}
+            </Button>
+          </div>
+        </form>
+      </Card>
     </div>
   );
 }

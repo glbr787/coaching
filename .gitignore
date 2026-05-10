@@ -1,6 +1,10 @@
 node_modules/
 .env
 dev.db
+dev.db-shm
+dev.db-wal
+*.sqlite
+*.db
 prisma/dev.db
 dist/
 .DS_Store

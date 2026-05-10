@@ -1,6 +1,13 @@
 import { useEffect, useState, type FormEvent } from 'react';
 import { useParams } from 'react-router-dom';
 import { api } from '../lib/api';
+import Header from '../components/layout/Header';
+import Card from '../components/ui/Card';
+import FormField from '../components/ui/FormField';
+import Textarea from '../components/ui/Textarea';
+import Button from '../components/ui/Button';
+import Alert from '../components/ui/Alert';
+import EmptyState from '../components/ui/EmptyState';
 
 export default function ClientDetail() {
   const { id } = useParams();
@@ -31,42 +38,42 @@ export default function ClientDetail() {
     }
   };
 
-  if (error) return <div className="error">{error}</div>;
-  if (!client) return <div className="loading">Chargement du client…</div>;
+  if (error) return <Alert variant="danger">{error}</Alert>;
+  if (!client) return <Card title="Chargement">Chargement du client…</Card>;
 
   return (
     <>
-      <h2>{client.firstName} {client.lastName}</h2>
-      <div className="card-grid">
-        <div className="card">
-          <h3>Profil</h3>
+      <Header title={`${client.firstName} ${client.lastName}`} subtitle="Fiche client détaillée" />
+      <div className="ui-card-grid">
+        <Card title="Profil">
           <p><strong>Email :</strong> {client.email || '—'}</p>
           <p><strong>Téléphone :</strong> {client.phone || '—'}</p>
           <p><strong>Objectif principal :</strong> {client.mainGoal || '—'}</p>
           <p><strong>Statut :</strong> {client.status}</p>
           <p><strong>Début :</strong> {client.startDate ? new Date(client.startDate).toLocaleDateString() : '—'}</p>
-        </div>
-        <div className="card">
-          <h3>Notes coach</h3>
+        </Card>
+        <Card title="Notes coach">
           <form onSubmit={addNote}>
-            <div className="field">
-              <label>Nouvelle note</label>
-              <textarea value={noteText} onChange={(e) => setNoteText(e.target.value)} />
-            </div>
-            <button type="submit" className="primary">Ajouter la note</button>
+            <FormField label="Nouvelle note">
+              <Textarea value={noteText} onChange={(e) => setNoteText(e.target.value)} />
+            </FormField>
+            <Button type="submit">Ajouter la note</Button>
           </form>
-        </div>
+        </Card>
       </div>
-      <div className="card">
-        <h3>Historique des notes</h3>
-        <ul>
-          {notes.map((note) => (
-            <li key={note.id} style={{ marginBottom: 12 }}>
-              <strong>{new Date(note.createdAt).toLocaleDateString()}</strong> — {note.content}
-            </li>
-          ))}
-        </ul>
-      </div>
+      <Card title="Historique des notes">
+        {notes.length === 0 ? (
+          <EmptyState title="Aucune note" description="Ajoutez une première note de suivi." />
+        ) : (
+          <ul>
+            {notes.map((note) => (
+              <li key={note.id} style={{ marginBottom: 10 }}>
+                <strong>{new Date(note.createdAt).toLocaleDateString()}</strong> - {note.content}
+              </li>
+            ))}
+          </ul>
+        )}
+      </Card>
     </>
   );
 }

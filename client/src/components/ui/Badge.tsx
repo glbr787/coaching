@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 
-type BadgeVariant = 'default' | 'success' | 'warning' | 'danger';
+export type BadgeVariant = 'default' | 'success' | 'warning' | 'danger';
 
 interface Props {
   children: ReactNode;
