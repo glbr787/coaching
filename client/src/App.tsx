@@ -8,6 +8,7 @@ import Programs from './pages/Programs';
 import Exercises from './pages/Exercises';
 import Settings from './pages/Settings';
 import Login from './pages/Login';
+import Landing from './pages/Landing';
 import Sidebar from './components/layout/Sidebar';
 import Card from './components/ui/Card';
 
@@ -44,10 +45,11 @@ function App() {
       {user && <Sidebar onLogout={handleLogout} />}
       <main className="ui-main">
         <Routes>
+          <Route path="/landing" element={<Landing />} />
           <Route path="/login" element={<Login onLogin={(data) => setUser(data)} />} />
           <Route
             path="/"
-            element={user ? <Dashboard /> : <Navigate to="/login" replace />}
+            element={user ? <Dashboard /> : <Landing />}
           />
           <Route
             path="/clients"

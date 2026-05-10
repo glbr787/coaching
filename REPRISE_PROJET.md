@@ -17,8 +17,11 @@
 - Themes clair/sombre/systeme.
 - UI inspiree macOS/iOS moderne sans copie de marque.
 
+
 ## 3. Etat actuel fonctionnel
 
+- vitrine publique moderne (landing page);
+- lien admin discret en footer;
 - login admin local;
 - dashboard basique;
 - CRUD clients;
@@ -34,6 +37,7 @@
 - compatibilite chemins Windows/macOS;
 - fichiers SQLite et .env ignores.
 
+
 ## 4. Identifiants de demonstration
 
 - Email: admin@example.com
@@ -41,6 +45,10 @@
 
 Ces identifiants doivent etre changes avant tout usage reel.
 
+### URLs au lancement local
+- Vitrine publique: http://localhost:5173
+- Admin (lien en bas a droite du footer): http://localhost:5173/login
+- Backend API: http://localhost:4000
 ## 5. Commandes de reprise
 
 ### macOS/Linux
