@@ -9,6 +9,12 @@ import Exercises from './pages/Exercises';
 import Settings from './pages/Settings';
 import Login from './pages/Login';
 import Landing from './pages/Landing';
+import ClientAccess from './pages/ClientAccess';
+import Blog from './pages/Blog';
+import FaqPage from './pages/FaqPage';
+import LegalNotice from './pages/LegalNotice';
+import PrivacyPolicy from './pages/PrivacyPolicy';
+import TermsPage from './pages/TermsPage';
 import Sidebar from './components/layout/Sidebar';
 import Card from './components/ui/Card';
 
@@ -46,6 +52,13 @@ function App() {
       <main className="ui-main">
         <Routes>
           <Route path="/landing" element={<Landing />} />
+          <Route path="/blog" element={<Blog />} />
+          <Route path="/faq" element={<FaqPage />} />
+          <Route path="/legal/mentions-legales" element={<LegalNotice />} />
+          <Route path="/legal/confidentialite" element={<PrivacyPolicy />} />
+          <Route path="/legal/cgv" element={<TermsPage />} />
+          <Route path="/client/login" element={<ClientAccess />} />
+          <Route path="/client/register" element={<ClientAccess />} />
           <Route path="/login" element={<Login onLogin={(data) => setUser(data)} />} />
           <Route
             path="/"
@@ -71,7 +84,7 @@ function App() {
             path="/settings"
             element={user ? <Settings /> : <Navigate to="/login" replace />}
           />
-          <Route path="*" element={<Navigate to={user ? '/' : '/login'} replace />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </main>
     </div>

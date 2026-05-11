@@ -2,41 +2,37 @@
 
 ## 1. Contexte du projet
 
-- Application locale pour coach sportif.
-- Prototype developpe pour fonctionner d'abord en local.
-- Objectif: suivi clients, programmes, notes, exercices, puis evolutions futures vers objectifs, mesures, nutrition, mental, ebooks.
+- Vitrine publique de coaching sportif + interface admin de pilotage.
+- Prototype evolutif: d'abord stabiliser le suivi clients/programmes/notes/exercices.
+- Objectif produit: experience client en ligne, puis enrichissement progressif (objectifs, mesures, nutrition, mental, ebooks).
 - Le projet n'est pas encore pret pour une vraie production avec donnees clients reelles.
 
 ## 2. Stack technique
 
 - Frontend React + Vite.
 - Backend Node.js + Express.
-- Base SQLite locale.
+- Base SQLite locale pour l'environnement prototype.
 - Prisma ORM.
-- Auth admin locale.
-- Themes clair/sombre/systeme.
-- UI inspiree macOS/iOS moderne sans copie de marque.
-
+- Auth admin locale (session).
+- Themes clair/sombre/systeme (infrastructure presente, UI de reglage a finaliser).
 
 ## 3. Etat actuel fonctionnel
 
-- vitrine publique moderne (landing page);
-- lien admin discret en footer;
+- vitrine publique moderne orientee conversion;
+- navigation vitrine coherente (accompagnement, resultats, FAQ);
+- boutons client Se connecter / S'inscrire;
+- pages client login/register en placeholder (pre-lancement);
+- acces admin strictement separe via lien discret en footer;
 - login admin local;
 - dashboard basique;
 - CRUD clients;
-- recherche et filtres clients;
-- edition client;
 - fiche client;
 - notes client;
 - programmes simples;
 - bibliotheque d'exercices;
-- theme clair/sombre/systeme;
-- accent et densite;
 - README de reprise Windows/macOS;
 - compatibilite chemins Windows/macOS;
 - fichiers SQLite et .env ignores.
-
 
 ## 4. Identifiants de demonstration
 
@@ -47,8 +43,11 @@ Ces identifiants doivent etre changes avant tout usage reel.
 
 ### URLs au lancement local
 - Vitrine publique: http://localhost:5173
-- Admin (lien en bas a droite du footer): http://localhost:5173/login
+- Client connexion: http://localhost:5173/client/login
+- Client inscription: http://localhost:5173/client/register
+- Admin (footer): http://localhost:5173/login
 - Backend API: http://localhost:4000
+
 ## 5. Commandes de reprise
 
 ### macOS/Linux
@@ -82,7 +81,7 @@ npm run dev
 - Ne jamais versionner .env.
 - Ne jamais versionner dev.db, dev.db-wal, dev.db-shm, *.db, *.sqlite.
 - Ne pas utiliser de donnees clients reelles tant que la securite n'est pas durcie.
-- SQLite local adapte au prototype local, pas a une vraie production web.
+- SQLite local adapte au prototype, pas a une production web ciblee public.
 - Pas de chiffrement complet de la base.
 - Pas de sauvegarde automatique.
 - Pas de conformite RGPD complete.
@@ -91,7 +90,7 @@ npm run dev
 ## 7. Regles pour le prochain developpeur / Copilot
 
 - Ne pas changer de stack sans raison forte.
-- Ne pas refondre tout le projet.
+- Ne pas refondre tout le projet admin.
 - Ne pas casser la Phase 1.
 - Privilegier des petits changements testables.
 - Lancer npm run build apres modification.
@@ -134,14 +133,15 @@ npm run dev
 
 ## 9. Hors perimetre actuel
 
-- pas de mise en ligne production;
+- pas de mise en ligne production finale;
 - pas de paiement;
 - pas d'email;
 - pas de multi-utilisateur avance;
 - pas d'analytics complexes;
-- pas de refonte complete UI.
+- pas de refonte complete de l'admin.
 
 ## 10. Derniers commits importants
 
 - ad299bf chore: stabilize local coach app phase 1
 - be9561e chore: prepare project handoff
+- d6be3db feat: add modern sales landing page with admin footer link
